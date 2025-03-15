@@ -16,8 +16,8 @@ lerna-debug.log*
 .hbuilderx
 
 # 自动生成的文件
-uni-pages.d.ts
-components.d.ts
-auto-import.d.ts
-pages.json
-manifest.json
+# uni-pages.d.ts
+# components.d.ts
+# auto-import.d.ts
+# pages.json
+# manifest.json
