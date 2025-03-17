@@ -10,7 +10,11 @@ import {
 
 // @docs https://github.com/unocss-applet/unocss-applet/tree/main
 /** 在小程序(UniApp 和 Taro)中使用UnoCSS，兼容不支持的语法 */
-import { presetApplet, presetRemRpx, transformerAttributify } from 'unocss-applet';
+import {
+  presetApplet,
+  presetRemRpx,
+  transformerAttributify,
+} from 'unocss-applet';
 
 // @docs https://unocss.dev/presets/legacy-compat
 import presetLegacyCompat from '@unocss/preset-legacy-compat';
@@ -20,7 +24,9 @@ const transformers: SourceCodeTransformer[] = [];
 const presets: Preset[] = [];
 if (isApplet) {
   // 解决第三方样式冲突问题
-  transformers.push(transformerAttributify({ prefixedOnly: true, prefix: 'sn' }) as any);
+  transformers.push(
+    transformerAttributify({ prefixedOnly: true, prefix: 'sn' }) as any
+  );
 } else {
   presets.push(presetRemRpx({ mode: 'rpx2rem' }) as any);
 }
@@ -57,7 +63,11 @@ export default defineConfig({
       'sn-btn-default': 'text-gray-400 border-rd-20 after:border-none',
     },
   ],
-  transformers: [transformerDirectives(), transformerVariantGroup(), ...transformers],
+  transformers: [
+    transformerDirectives(),
+    transformerVariantGroup(),
+    ...transformers,
+  ],
   rules: [
     [
       'p-safe',

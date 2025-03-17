@@ -2,7 +2,7 @@
   <wd-config-provider theme="light" :theme-vars="themeVars">
     <view class="tabbar-app-layout">
       <wd-navbar
-        :title="activeTabbar.title"
+        :title="$t(activeTabbar.title)"
         safe-area-inset-top
         placeholder
         fixed
@@ -23,7 +23,7 @@
           :key="index"
           :name="item.name"
           :value="getTabbarItemValue(item.name)"
-          :title="item.title"
+          :title="$t(item.title)"
           :icon="item.icon"
         />
       </wd-tabbar>
@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import type { ConfigProviderThemeVars } from 'wot-design-uni';
 import { useTabbar } from '@/composables/useTabbar';
+import { useMessage } from 'wot-design-uni';
 
 const router = useRouter();
 
@@ -52,6 +53,9 @@ function handleTabbarChange({ value }: { value: string }) {
   setTabbarItemActive(value);
   router.pushTab({ name: value });
 }
+
+const message = useMessage();
+uni.$message = message;
 
 onMounted(() => {
   nextTick(() => {

@@ -18,7 +18,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import legacy from '@vitejs/plugin-legacy';
 
 // https://vitejs.dev/config/
-export default async({ mode }) => {
+export default async ({ mode }) => {
   // docs: https://unocss.dev/
   const UnoCSS = (await import('unocss/vite')).default;
   const env = loadEnv(mode, path.resolve(process.cwd(), 'env'));
@@ -53,7 +53,7 @@ export default async({ mode }) => {
             'Firefox ESR',
           ],
           renderLegacyChunks: true,
-      }),
+        }),
       // uni-app pages配置 会根据route配置，自动生成路由
       UniPages({
         // 排除组件文件
@@ -99,7 +99,8 @@ export default async({ mode }) => {
             [VITE_PROXY_PREFIX]: {
               target: VITE_SERVER_BASEURL,
               changeOrigin: true,
-              rewrite: (path) => path.replace(new RegExp(`^${VITE_PROXY_PREFIX}`), ''),
+              rewrite: (path) =>
+                path.replace(new RegExp(`^${VITE_PROXY_PREFIX}`), ''),
             },
           }
         : undefined,

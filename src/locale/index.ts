@@ -1,21 +1,26 @@
 import { createI18n } from 'vue-i18n';
 // @ts-ignore
-import en from './en.json';
+import enUS from './lang/en-US.json';
 // @ts-ignore
-import zh from './zh-Hans.json';
+import zhCN from './lang/zh-Hans.json';
 
 const messages = {
-  en,
-  'zh-CN': zh,
+  'zh-Hans': zhCN,
+  en: enUS,
 };
 
 const i18n = createI18n({
   locale: uni.getLocale(),
   messages,
+  // 关闭 vue-i18n 的控制台输出
+  silentTranslationWarn: true,
+  silentFallbackWarn: true,
+  missingWarn: false,
+  fallbackWarn: false,
 });
 
-console.log(uni.getLocale());
-console.log(i18n.global.locale);
+console.log('uni.getLocale: ', uni.getLocale());
+console.log('i18n.global.locale: ', i18n.global.locale);
 
 /**
  * 非 vue 文件使用这个方法
@@ -35,4 +40,8 @@ export const translate = (localeKey: string) => {
   }
   return localeKey;
 };
+
+// 挂载到 uni 上
+uni.$t = i18n.global.t;
+
 export default i18n;
