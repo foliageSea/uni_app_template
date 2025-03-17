@@ -4,7 +4,6 @@ import { isWhiteList } from '@/router';
 const navigateToInterceptor = {
   invoke({ url }: { url: string }) {
     // 判断是否登录
-    debugger;
     if (useUserStore().token) {
       return true;
     } else {

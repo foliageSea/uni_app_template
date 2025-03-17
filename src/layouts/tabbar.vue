@@ -1,13 +1,13 @@
 <template>
   <wd-config-provider theme="light" :theme-vars="themeVars">
     <view class="tabbar-app-layout">
-      <!-- <wd-navbar
+      <wd-navbar
         :title="activeTabbar.title"
         safe-area-inset-top
         placeholder
         fixed
         :bordered="false"
-      /> -->
+      />
 
       <slot />
       <wd-tabbar
