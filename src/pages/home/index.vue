@@ -9,26 +9,10 @@
 </route>
 
 <template>
-  <view class="">
-    首页
-
-    <button @click="handleClick">测试</button>
-  </view>
+  <view class=""> 首页 </view>
 </template>
 
-<script lang="ts" setup>
-//
-
-const router = useRouter();
-
-const handleClick = () => {
-  // router.pushTab({ name: 'personal' });
-
-  uni.navigateTo({
-    url: '/pages/personal/index',
-  });
-};
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped>
 //

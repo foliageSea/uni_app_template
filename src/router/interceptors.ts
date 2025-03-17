@@ -9,7 +9,9 @@ const navigateToInterceptor = {
       return true;
     } else {
       const flag = isWhiteList(url);
-      if (!flag) return uni.navigateTo({ url: '/sub-pages/login/index' });
+      if (!flag) {
+        return uni.navigateTo({ url: '/sub-pages/login/index' });
+      }
       return flag;
     }
   },

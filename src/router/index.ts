@@ -1,6 +1,7 @@
 // docs: https://moonofweisheng.github.io/uni-mini-router/
 import { createRouter } from 'uni-mini-router';
 // 导入pages.json
+// @ts-ignore
 import pagesJson from '../pages.json';
 // 引入uni-parse-pages
 import pagesJsonToRoutes from 'uni-parse-pages';

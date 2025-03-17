@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia';
 
-import { IUserInfo } from '@/types/user';
+interface IUserInfo {
+  nickName: string;
+  avatarUrl: string;
+  userId: string;
+  gender: number;
+}
+
 const initUserState = <IUserInfo>{
   nickName: '',
   avatarUrl: '',

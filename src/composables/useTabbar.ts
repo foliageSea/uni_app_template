@@ -11,14 +11,14 @@ const tabbarItems = ref<TabbarItem[]>([
     name: 'home',
     value: null,
     active: true,
-    title: 'home',
+    title: '首页',
     icon: 'home',
   },
   {
     name: 'personal',
     value: null,
     active: false,
-    title: 'personal',
+    title: '个人',
     icon: 'app',
   },
 ]);
