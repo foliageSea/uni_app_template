@@ -51,7 +51,8 @@
   "author": "foliageSea",
   "license": "MIT",
   "engines": {
-    "node": ">= 18.0.0"
+    "node": ">= 18.0.0",
+    "pnpm": ">=7.30"
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-4020920240930001",
