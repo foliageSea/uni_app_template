@@ -45,11 +45,19 @@
     "build:mp-xhs": "uni build -p mp-xhs",
     "build:quickapp-webview": "uni build -p quickapp-webview",
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
-    "build:quickapp-webview-union": "uni build -p quickapp-webview-union"
+    "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
+    "postinstall": "simple-git-hooks"
   },
   "keywords": [],
   "author": "foliageSea",
   "license": "MIT",
+  "nano-staged": {
+    "*.md": "prettier --write",
+    "*.{ts,tsx,js,vue,scss}": "prettier --write"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx nano-staged"
+  },
   "engines": {
     "node": ">= 18.0.0",
     "pnpm": ">=7.30"
@@ -95,7 +103,10 @@
     "@vitejs/plugin-legacy": "^5.4.3",
     "@vue/runtime-core": "^3.5.12",
     "@vue/tsconfig": "^0.5.1",
+    "nano-staged": "^0.8.0",
+    "prettier": "^3.5.3",
     "sass": "1.78.0",
+    "simple-git-hooks": "^2.11.1",
     "typescript": "^5.5.4",
     "uni-mini-router": "^0.1.6",
     "uni-parse-pages": "^0.0.1",
