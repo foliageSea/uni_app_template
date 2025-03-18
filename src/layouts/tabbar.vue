@@ -1,5 +1,5 @@
 <template>
-  <wd-config-provider theme="light" :theme-vars="themeVars">
+  <wd-config-provider :theme="theme.theme">
     <view class="tabbar-app-layout">
       <wd-navbar
         :title="$t(activeTabbar.title)"
@@ -34,17 +34,16 @@
 </template>
 
 <script setup lang="ts">
-import type { ConfigProviderThemeVars } from 'wot-design-uni';
 import { useTabbar } from '@/composables/useTabbar';
 import { useMessage } from 'wot-design-uni';
+
+import { useThemeStore } from '@/store';
 
 const router = useRouter();
 
 const route = useRoute();
 
-const themeVars: ConfigProviderThemeVars = {
-  colorTheme: '#5474f2',
-};
+const theme = useThemeStore();
 
 const { activeTabbar, getTabbarItemValue, setTabbarItemActive, tabbarList } =
   useTabbar();
