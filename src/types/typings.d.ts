@@ -17,3 +17,20 @@ declare global {
     $t: typeof i18n.global.t;
   }
 }
+export interface IBaseResponse<T> {
+  code: number;
+  message: string;
+  data: T;
+  provider: string;
+  responseTime: string;
+  success: boolean;
+  timestamp: number;
+}
+
+export interface IPageData<T> {
+  pageNo: number;
+  pageSize: number;
+  rows: T[];
+  totalPages: number;
+  totalRows: number;
+}

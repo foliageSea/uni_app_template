@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import { createUniAppAxiosAdapter } from '@uni-helper/axios-adapter';
 import { useUserStore } from '@/store';
+import { IBaseResponse } from '@/types/typings';
 
 const {
   VITE_SERVER_BASEURL: baseURL,
@@ -50,7 +51,9 @@ const removeLoading = () => {
 
 const debounceTokenCancel = new Map();
 
-export const request = (config?: IRequestConfig): any => {
+export const request = <T>(
+  config?: IRequestConfig,
+): Promise<IBaseResponse<T>> => {
   const instance = axios.create({
     baseURL,
     timeout,
@@ -97,7 +100,8 @@ export const request = (config?: IRequestConfig): any => {
      */
     (response: AxiosResponse) => {
       const res = response.data;
-      const { loading = showLoading, showError = showErr } = response.config as IRequestConfig;
+      const { loading = showLoading, showError = showErr } =
+        response.config as IRequestConfig;
       if (loading) removeLoading();
       // 请求出错处理
       if (res[code] === -1) {
@@ -120,7 +124,8 @@ export const request = (config?: IRequestConfig): any => {
       removeLoading();
       // 是否显示错误信息提示 默认显示 关闭时需要在接口调用处自行处理
       if (JSON.parse(VITE_SHOW_ERROR)) {
-        if (error.response[code]) handleNetworkError(error.response[code], error.response[msg]);
+        if (error.response[code])
+          handleNetworkError(error.response[code], error.response[msg]);
         else handleNetworkError(error.response.status, ''); // 非业务相关错误
       } else return Promise.reject(error);
     },
