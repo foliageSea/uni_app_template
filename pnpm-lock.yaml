@@ -74,6 +74,9 @@ importers:
       wot-design-uni:
         specifier: ^1.3.13
         version: 1.7.1(vue@3.4.21(typescript@5.8.2))
+      z-paging:
+        specifier: ^2.8.6
+        version: 2.8.6
     devDependencies:
       '@dcloudio/types':
         specifier: ^3.4.14
@@ -4525,6 +4528,10 @@ packages:
   yargs@16.2.0:
     resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
     engines: {node: '>=10'}
+
+  z-paging@2.8.6:
+    resolution: {integrity: sha512-UdmHuu08p0TFQQX+JVW5vj2/VKyBb0g3NWJkCjIzWcCwdWQjaNOCOjodISvfpriDdjB2IvFo0cdWc6XYkyg3DA==}
+    engines: {HBuilderX: ^3.0.7}
 
 snapshots:
 
@@ -9865,3 +9872,5 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+
+  z-paging@2.8.6: {}
