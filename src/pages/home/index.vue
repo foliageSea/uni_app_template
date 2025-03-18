@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts" setup>
-import TestLang from './components/TestLang.vue';
-import TestIcon from './components/TestIcon.vue';
+import TestLang from './com/TestLang.vue';
+import TestIcon from './com/TestIcon.vue';
 </script>
 
 <style lang="scss" scoped>
