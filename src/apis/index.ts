@@ -2,7 +2,7 @@ import { request } from '@/utils/request';
 import { serviceName } from '@/constants';
 import { IPageData } from '@/types/typings';
 
-const useUserService = () => {
+export const useUserService = () => {
   const controllerName = '/user/';
 
   const login = (data: any) => {
