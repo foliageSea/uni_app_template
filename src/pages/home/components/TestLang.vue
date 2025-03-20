@@ -14,7 +14,7 @@ function onClick() {
     uni.$t('范围: {a}-{b}', {
       a: 1,
       b: 2,
-    }),
+    })
   );
 }
 

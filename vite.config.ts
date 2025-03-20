@@ -57,7 +57,7 @@ export default async ({ mode }) => {
       // uni-app pages配置 会根据route配置，自动生成路由
       UniPages({
         // 排除组件文件
-        exclude: ['**/components/**/**.*', '**/com/**/**.*'],
+        exclude: ['**/components/**/**.*'],
         // 'json5' | 'json' | 'yaml' | 'yml', 具体使用参看文档：https://uni-helper.js.org/vite-plugin-uni-pages
         routeBlockLang: 'json5',
         dts: 'src/types/uni-pages.d.ts',
