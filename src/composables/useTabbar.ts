@@ -46,12 +46,6 @@ export function useTabbar() {
   };
 
   const setTabbarItemActive = (name: string) => {
-    // 未登录跳转登录页
-    if (!useUserStore().token) {
-      uni.navigateTo({ url: '/sub-pages/login/index' });
-      throw new Error('未登录');
-    }
-
     tabbarItems.value.forEach((item) => {
       if (item.name === name) {
         item.active = true;

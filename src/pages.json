@@ -35,8 +35,16 @@
   },
   "pages": [
     {
-      "path": "pages/home/index",
+      "path": "pages/login/index",
       "type": "home",
+      "style": {
+        "navigationBarTitleText": "登录"
+      },
+      "name": "login"
+    },
+    {
+      "path": "pages/home/index",
+      "type": "page",
       "name": "home",
       "layout": "tabbar",
       "style": {
@@ -53,19 +61,5 @@
       }
     }
   ],
-  "subPackages": [
-    {
-      "root": "sub-pages",
-      "pages": [
-        {
-          "path": "login/index",
-          "type": "page",
-          "style": {
-            "navigationBarTitleText": "登录"
-          },
-          "name": "Login"
-        }
-      ]
-    }
-  ]
+  "subPackages": []
 }

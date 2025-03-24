@@ -49,8 +49,9 @@ const { activeTabbar, getTabbarItemValue, setTabbarItemActive, tabbarList } =
   useTabbar();
 
 function handleTabbarChange({ value }: { value: string }) {
-  setTabbarItemActive(value);
   router.pushTab({ name: value });
+
+  setTabbarItemActive(value);
 }
 
 const message = useMessage();
