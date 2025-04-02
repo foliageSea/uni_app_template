@@ -51,85 +51,85 @@ const removeLoading = () => {
 
 const debounceTokenCancel = new Map();
 
+const instance = axios.create({
+  baseURL,
+  timeout,
+  headers: {
+    'Content-Type': VITE_CONTENT_TYPE,
+  },
+  adapter: createUniAppAxiosAdapter(),
+});
+
+// 请求拦截器
+instance.interceptors.request.use(
+  (config: IRequestConfig): any => {
+    // 根据自己的项目进行修改参数
+    const token = useUserStore().token;
+    // 设置token
+    if (token) config.headers![tokenKey] = token;
+    const { loading = showLoading } = config;
+    if (loading) addLoading();
+    const requestTokenKey = `${config.method}_${config.url}`;
+    const cancelToken = debounceTokenCancel.get(requestTokenKey);
+    if (cancelToken) cancelToken();
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        resolve(config);
+      }, 800);
+      debounceTokenCancel.set(requestTokenKey, () => {
+        clearTimeout(timer);
+        resolve(new Error('请勿重复请求'));
+      });
+    });
+  },
+  (error) => {
+    // do something with request error
+    return Promise.reject(error);
+  },
+);
+
+instance.interceptors.response.use(
+  /**
+   * If you want to get http information such as headers or status
+   * Please return  response => response
+   */
+  (response: AxiosResponse) => {
+    const res = response.data;
+    const { loading = showLoading, showError = showErr } =
+      response.config as IRequestConfig;
+    if (loading) removeLoading();
+    // 请求出错处理
+    if (res[code] === -1) {
+      uni.showToast({
+        title: '服务器异常',
+        duration: 2000,
+      });
+
+      return Promise.reject(res);
+    }
+    if (JSON.parse(VITE_SUCCESS_CODE).indexOf(res[code]) !== -1) {
+      return res;
+    } else {
+      // 业务错误处理, 根据自己的业务状态码调整
+      if (showError) handleNetworkError(res[code], res[msg]);
+      else return Promise.reject(res);
+    }
+  },
+  (error) => {
+    removeLoading();
+    // 是否显示错误信息提示 默认显示 关闭时需要在接口调用处自行处理
+    if (JSON.parse(VITE_SHOW_ERROR)) {
+      if (error.response[code])
+        handleNetworkError(error.response[code], error.response[msg]);
+      else handleNetworkError(error.response.status, ''); // 非业务相关错误
+    } else return Promise.reject(error);
+  },
+);
+
 export const request = <T>(
   config?: IRequestConfig,
 ): Promise<IBaseResponse<T>> => {
-  const instance = axios.create({
-    baseURL,
-    timeout,
-    headers: {
-      'Content-Type': VITE_CONTENT_TYPE,
-    },
-    ...config,
-    adapter: createUniAppAxiosAdapter(),
-  });
-
-  // 请求拦截器
-  instance.interceptors.request.use(
-    (config: IRequestConfig): any => {
-      // 根据自己的项目进行修改参数
-      const token = useUserStore().token;
-      // 设置token
-      if (token) config.headers![tokenKey] = token;
-      const { loading = showLoading } = config;
-      if (loading) addLoading();
-      const requestTokenKey = `${config.method}_${config.url}`;
-      const cancelToken = debounceTokenCancel.get(requestTokenKey);
-      if (cancelToken) cancelToken();
-      return new Promise((resolve) => {
-        const timer = setTimeout(() => {
-          clearTimeout(timer);
-          resolve(config);
-        }, 800);
-        debounceTokenCancel.set(requestTokenKey, () => {
-          clearTimeout(timer);
-          resolve(new Error('请勿重复请求'));
-        });
-      });
-    },
-    (error) => {
-      // do something with request error
-      return Promise.reject(error);
-    },
-  );
-
-  instance.interceptors.response.use(
-    /**
-     * If you want to get http information such as headers or status
-     * Please return  response => response
-     */
-    (response: AxiosResponse) => {
-      const res = response.data;
-      const { loading = showLoading, showError = showErr } =
-        response.config as IRequestConfig;
-      if (loading) removeLoading();
-      // 请求出错处理
-      if (res[code] === -1) {
-        uni.showToast({
-          title: '服务器异常',
-          duration: 2000,
-        });
-
-        return Promise.reject(res);
-      }
-      if (JSON.parse(VITE_SUCCESS_CODE).indexOf(res[code]) !== -1) {
-        return res;
-      } else {
-        // 业务错误处理, 根据自己的业务状态码调整
-        if (showError) handleNetworkError(res[code], res[msg]);
-        else return Promise.reject(res);
-      }
-    },
-    (error) => {
-      removeLoading();
-      // 是否显示错误信息提示 默认显示 关闭时需要在接口调用处自行处理
-      if (JSON.parse(VITE_SHOW_ERROR)) {
-        if (error.response[code])
-          handleNetworkError(error.response[code], error.response[msg]);
-        else handleNetworkError(error.response.status, ''); // 非业务相关错误
-      } else return Promise.reject(error);
-    },
-  );
   return instance.request(config!);
 };
 
