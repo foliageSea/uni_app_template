@@ -18,6 +18,6 @@ lerna-debug.log*
 # 自动生成的文件
 uni-pages.d.ts
 # components.d.ts
-# auto-import.d.ts
-# pages.json
-# manifest.json
+auto-import.d.ts
+pages.json
+manifest.json
