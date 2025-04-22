@@ -16,6 +16,7 @@ import ViteRestart from 'vite-plugin-restart';
 // docs https://github.com/vbenjs/vite-plugin-vue-setup-extend
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import legacy from '@vitejs/plugin-legacy';
+import DevTools from '@uni-helper/devtools';
 
 // https://vitejs.dev/config/
 export default async ({ mode }) => {
@@ -42,6 +43,9 @@ export default async ({ mode }) => {
     },
     // 插件注意： Unixx需要在Uni()之前引入
     plugins: [
+      DevTools({
+        desktop: true,
+      }),
       process.env.UNI_PLATFORM === 'h5' &&
         legacy({
           targets: [
