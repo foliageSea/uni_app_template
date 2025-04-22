@@ -54,7 +54,7 @@
   "license": "MIT",
   "nano-staged": {
     "*.md": "prettier --write",
-    "*.{ts,tsx,js,vue,scss}": "prettier --write"
+    "*.{ts,tsx,js,vue,scss,d.ts}": "prettier --write"
   },
   "simple-git-hooks": {
     "pre-commit": "npx nano-staged"
