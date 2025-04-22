@@ -97,6 +97,7 @@
     "@iconify-json/icon-park-outline": "^1.2.2",
     "@types/node": "^22.8.2",
     "@types/wechat-miniprogram": "^3.4.8",
+    "@uni-helper/devtools": "0.0.1-beta.8",
     "@uni-helper/vite-plugin-uni-layouts": "^0.1.10",
     "@uni-helper/vite-plugin-uni-manifest": "^0.2.7",
     "@uni-helper/vite-plugin-uni-pages": "^0.2.28",
