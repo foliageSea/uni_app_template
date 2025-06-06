@@ -122,10 +122,10 @@ function addAuthHeader(config: IRequestConfig) {
 function cacheAuthToken(response: AxiosResponse) {
   let token = response.headers['access-token'];
   let refreshToken = response.headers['x-access-token'];
-  if (_validateToken(token)) {
+  if (validateToken(token)) {
     useUserStore().setToken(token);
   }
-  if (_validateToken(refreshToken)) {
+  if (validateToken(refreshToken)) {
     useUserStore().setRefreshToken(refreshToken);
   }
   let data = response.data;
@@ -169,7 +169,7 @@ function handleServiceError(response: AxiosResponse) {
   }
 }
 
-function _validateToken(token: string | null) {
+function validateToken(token: string | null) {
   return token !== null && token !== '' && token !== 'invalid_token';
 }
 
