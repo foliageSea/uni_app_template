@@ -21,6 +21,5 @@ export const useThemeStore = defineStore('theme', {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
     },
   },
-
   unistorage: true,
 });

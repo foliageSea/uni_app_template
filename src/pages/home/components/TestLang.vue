@@ -7,20 +7,22 @@
 </template>
 
 <script lang="ts" setup>
-import { useLocale } from '@/locale/utils';
+import { useLocale, LocaleEnum } from '@/locale/utils';
 
 function onClick() {
   uni.$message.alert(
     uni.$t('范围: {a}-{b}', {
       a: 1,
       b: 2,
-    })
+    }),
   );
 }
 
 function onChange() {
   const local = uni.getLocale();
   console.log(local);
-  useLocale().setLocale(local === 'zh-Hans' ? 'en-US' : 'zh-Hans');
+  useLocale().setLocale(
+    local === LocaleEnum.zhHans ? LocaleEnum.en : LocaleEnum.zhHans,
+  );
 }
 </script>
