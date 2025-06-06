@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import { useTabbar } from '@/composables/useTabbar';
-import { useMessage } from 'wot-design-uni';
 
 import { useThemeStore } from '@/store';
 
@@ -50,12 +49,8 @@ const { activeTabbar, getTabbarItemValue, setTabbarItemActive, tabbarList } =
 
 function handleTabbarChange({ value }: { value: string }) {
   router.pushTab({ name: value });
-
   setTabbarItemActive(value);
 }
-
-const message = useMessage();
-uni.$message = message;
 
 onMounted(() => {
   nextTick(() => {

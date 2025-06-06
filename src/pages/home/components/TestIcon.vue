@@ -1,4 +1,3 @@
 <template>
-  <button class="u-icon-park-outline:archery"></button>
-  <button class="u-icon-park-baby bg-red"></button>
+  <button class="u-ant-design:android-filled"></button>
 </template>

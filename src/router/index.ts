@@ -7,6 +7,7 @@ import pagesJson from '../pages.json';
 import pagesJsonToRoutes from 'uni-parse-pages';
 import { isWhiteList } from './white-list';
 import { useUserStore } from '@/store';
+import { styledLog } from '@/utils/logger';
 
 // 生成路由表
 const routes = pagesJsonToRoutes(pagesJson);
@@ -15,13 +16,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _, next) => {
-  console.log('uni-mini-router 路由守卫', to);
+  styledLog('uni-mini-router 路由守卫', '#2196F3', to);
   // 判断是否登录
   if (useUserStore().token) {
     next(true);
   } else {
     const flag = isWhiteList(to.path);
     if (!flag) {
+      styledLog('uni-mini-router 路由守卫', '#f53f3f', '未登录，跳转至登录页');
+
       router.replaceAll({
         path: '/pages/login/index',
       });

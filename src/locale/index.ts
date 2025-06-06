@@ -4,6 +4,7 @@ import enUS from './lang/en-US.json';
 // @ts-ignore
 import zhCN from './lang/zh-Hans.json';
 import { useLocale } from '@/locale/utils';
+import { styledLog } from '@/utils/logger';
 
 const messages = {
   'zh-Hans': zhCN,
@@ -20,8 +21,8 @@ const i18n = createI18n({
   fallbackWarn: false,
 });
 
-console.log('uni.getLocale: ', uni.getLocale());
-console.log('i18n.global.locale: ', i18n.global.locale);
+styledLog('uni.getLocale: ', '#218dae', uni.getLocale());
+styledLog('i18n.global.locale: ', '#218dae', i18n.global.locale);
 
 /**
  * 非 vue 文件使用这个方法
@@ -42,11 +43,10 @@ export const translate = (localeKey: string) => {
   return localeKey;
 };
 
-// 挂载到 uni 上
-uni.$t = i18n.global.t;
-
 export function stepUpI18n(app: any) {
   app.use(i18n);
+  // 挂载到 uni 上
+  uni.$t = i18n.global.t;
   app.config.globalProperties.$t = uni.$t;
   // #ifdef H5
   window.$t = uni.$t;

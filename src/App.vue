@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { styledLog } from '@/utils/logger';
 onLaunch(() => {
-  console.log('App Launch');
+  styledLog('App', '#51daab', 'App Launch');
 });
 onShow(() => {
-  console.log('App Show');
+  styledLog('App', '#3c99b5', 'App Show');
 });
 onHide(() => {
   console.log('App Hide');
+  styledLog('App', '#e3a27c', 'App Hide');
 });
 </script>
 <style></style>

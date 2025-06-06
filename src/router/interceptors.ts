@@ -1,15 +1,18 @@
 import { useUserStore } from '@/store';
 import { isWhiteList } from '@/router';
+import { styledLog } from '@/utils/logger';
 
 const navigateToInterceptor = {
   invoke({ url }: { url: string }) {
-    console.log('uni 路由拦截器', url);
+    styledLog('uni 路由拦截器', '#51daab', url);
+
     // 判断是否登录
     if (useUserStore().token) {
       return true;
     } else {
       const flag = isWhiteList(url);
       if (!flag) {
+        styledLog('uni 路由拦截器', '#f53f3f', '未登录，跳转至登录页');
         return uni.navigateTo({ url: '/pages/login/index' });
       }
       return flag;

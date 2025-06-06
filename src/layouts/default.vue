@@ -6,8 +6,4 @@
   </view>
 </template>
 
-<script lang="ts" setup>
-onShow(() => {
-  uni.hideTabBar();
-});
-</script>
+<script lang="ts" setup></script>

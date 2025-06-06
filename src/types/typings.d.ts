@@ -13,7 +13,6 @@ declare module 'vue' {
 // 声明 uni 全局属性
 declare global {
   interface Uni {
-    $message: Message;
     $t: typeof i18n.global.t;
   }
   interface Window {
