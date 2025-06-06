@@ -25,7 +25,7 @@ const presets: Preset[] = [];
 if (isApplet) {
   // 解决第三方样式冲突问题
   transformers.push(
-    transformerAttributify({ prefixedOnly: true, prefix: 'sn' }) as any
+    transformerAttributify({ prefixedOnly: true, prefix: 'sn' }) as any,
   );
 } else {
   presets.push(presetRemRpx({ mode: 'rpx2rem' }) as any);
@@ -37,11 +37,11 @@ presets.push(presetAttributify() as any);
 export default defineConfig({
   presets: [
     ...presets,
-    // 配置图标
+    // 配置图标 前缀为 u-
     presetIcons({
       scale: 1.2,
       warn: true,
-      prefix: 'sn-',
+      prefix: 'u-',
       autoInstall: true,
       extraProperties: {
         display: 'inline-block',

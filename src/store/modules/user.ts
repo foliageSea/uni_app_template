@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     userInfo: { ...initUserState },
     token: '',
+    refreshToken: '',
   }),
 
   getters: {
@@ -33,6 +34,14 @@ export const useUserStore = defineStore('user', {
     /** 设置请求token */
     setToken(token: string) {
       this.token = token;
+    },
+    setRefreshToken(token: string) {
+      this.refreshToken = token;
+    },
+    logout() {
+      this.userInfo = { ...initUserState };
+      this.token = '';
+      this.refreshToken = '';
     },
   },
 

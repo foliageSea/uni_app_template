@@ -7,18 +7,11 @@ const {
   VITE_SERVER_BASEURL: baseURL,
   VITE_REQUEST_TIMEOUT,
   VITE_CONTENT_TYPE,
-  VITE_SUCCESS_CODE,
   VITE_SHOW_LOADING,
   VITE_SHOW_ERROR,
-  VITE_RESPONSE_CODE_KEY,
-  VITE_RESPONSE_MSG_KEY,
-  VITE_TOKEN_KEY,
 } = import.meta.env;
 
 const timeout = JSON.parse(VITE_REQUEST_TIMEOUT);
-const code = VITE_RESPONSE_CODE_KEY;
-const msg = VITE_RESPONSE_MSG_KEY;
-const tokenKey = VITE_TOKEN_KEY;
 const showErr = JSON.parse(VITE_SHOW_ERROR);
 const showLoading = JSON.parse(VITE_SHOW_LOADING);
 export interface ResponseType<T = any> {
@@ -63,15 +56,16 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config: IRequestConfig): any => {
-    // 根据自己的项目进行修改参数
-    const token = useUserStore().token;
-    // 设置token
-    if (token) config.headers![tokenKey] = token;
     const { loading = showLoading } = config;
-    if (loading) addLoading();
+    if (loading) {
+      addLoading();
+    }
+    addAuthHeader(config);
     const requestTokenKey = `${config.method}_${config.url}`;
     const cancelToken = debounceTokenCancel.get(requestTokenKey);
-    if (cancelToken) cancelToken();
+    if (cancelToken) {
+      cancelToken();
+    }
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
         clearTimeout(timer);
@@ -95,93 +89,92 @@ instance.interceptors.response.use(
    * Please return  response => response
    */
   (response: AxiosResponse) => {
-    const res = response.data;
+    const data = response.data;
     const { loading = showLoading, showError = showErr } =
       response.config as IRequestConfig;
-    if (loading) removeLoading();
-    // 请求出错处理
-    if (res[code] === -1) {
-      uni.showToast({
-        title: '服务器异常',
-        duration: 2000,
-      });
-
-      return Promise.reject(res);
+    if (loading) {
+      removeLoading();
     }
-    if (JSON.parse(VITE_SUCCESS_CODE).indexOf(res[code]) !== -1) {
-      return res;
-    } else {
-      // 业务错误处理, 根据自己的业务状态码调整
-      if (showError) handleNetworkError(res[code], res[msg]);
-      else return Promise.reject(res);
-    }
+    cacheAuthToken(response);
+    handleServiceError(response);
+    return data;
   },
   (error) => {
     removeLoading();
-    // 是否显示错误信息提示 默认显示 关闭时需要在接口调用处自行处理
-    if (JSON.parse(VITE_SHOW_ERROR)) {
-      if (error.response[code])
-        handleNetworkError(error.response[code], error.response[msg]);
-      else handleNetworkError(error.response.status, ''); // 非业务相关错误
-    } else return Promise.reject(error);
+    return Promise.reject(error);
   },
 );
+
+function _handleToken(token: string | null) {
+  if (token === null || token === '') {
+    return null;
+  }
+  return ['Bearer', token].join(' ');
+}
+
+function addAuthHeader(config: IRequestConfig) {
+  const token = useUserStore().token;
+  const refreshToken = useUserStore().refreshToken;
+  config.headers['Authorization'] = _handleToken(token);
+  config.headers['x-access-token'] = _handleToken(refreshToken);
+}
+
+function cacheAuthToken(response: AxiosResponse) {
+  let token = response.headers['access-token'];
+  let refreshToken = response.headers['x-access-token'];
+  if (_validateToken(token)) {
+    useUserStore().setToken(token);
+  }
+  if (_validateToken(refreshToken)) {
+    useUserStore().setRefreshToken(refreshToken);
+  }
+  let data = response.data;
+  let code = data['code'];
+  if (code === 401) {
+    useUserStore().logout();
+    uni.showToast({
+      title: '登录过期',
+      duration: 2000,
+    });
+    throw new Error('登录过期');
+  }
+}
+
+function handleServiceError(response: AxiosResponse) {
+  let data = response.data;
+  let code = data['code'];
+  let success = data['success'];
+  let message = data['message'];
+  if (success) {
+    return;
+  }
+  if (code === 500) {
+    uni.showToast({
+      title: '服务器内部发生错误',
+      duration: 2000,
+    });
+    throw new Error(message);
+  } else if (code === 400 || code === 1001) {
+    uni.showToast({
+      title: message,
+      duration: 2000,
+    });
+    throw new Error(message);
+  } else {
+    uni.showToast({
+      title: message,
+      duration: 2000,
+    });
+    throw new Error(message);
+  }
+}
+
+function _validateToken(token: string | null) {
+  return token !== null && token !== '' && token !== 'invalid_token';
+}
 
 export const request = <T>(
   config?: IRequestConfig,
 ): Promise<IBaseResponse<T>> => {
   return instance.request(config!);
-};
-
-const handleNetworkError = (status: number, message: string) => {
-  let errMessage = '未知错误';
-  if (status) {
-    switch (status) {
-      case 400:
-        errMessage = message || '错误的请求';
-        break;
-      case 401:
-        errMessage = message || '未授权，请重新登录';
-        break;
-      case 403:
-        errMessage = message || '拒绝访问';
-        break;
-      case 404:
-        errMessage = message || '请求错误,未找到该资源';
-        break;
-      case 405:
-        errMessage = message || '请求方法未允许';
-        break;
-      case 408:
-        errMessage = message || '请求超时';
-        break;
-      case 500:
-        errMessage = message || '服务器端出错';
-        break;
-      case 501:
-        errMessage = message || '网络未实现';
-        break;
-      case 502:
-        errMessage = message || '网络错误';
-        break;
-      case 503:
-        errMessage = message || '服务不可用';
-        break;
-      case 504:
-        errMessage = message || '网络超时';
-        break;
-      case 505:
-        errMessage = message || 'http版本不支持该请求';
-        break;
-      default:
-        errMessage = message || `其他连接错误 --${status}`;
-    }
-  } else {
-    errMessage = message || `无法连接到服务器！`;
-  }
-
-  uni.showToast({
-    title: errMessage,
-    icon: 'none',
-  });
 };

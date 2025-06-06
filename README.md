@@ -11,4 +11,4 @@
 
 ## 图标
 
-- [iconify](https://icones.js.org/)
+- [iconify](https://icones.js.org/) 前缀: `u-`

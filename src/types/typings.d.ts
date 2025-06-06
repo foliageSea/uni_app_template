@@ -16,6 +16,9 @@ declare global {
     $message: Message;
     $t: typeof i18n.global.t;
   }
+  interface Window {
+    $t: typeof i18n.global.t;
+  }
 }
 export interface IBaseResponse<T> {
   code: number;

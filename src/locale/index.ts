@@ -3,6 +3,7 @@ import { createI18n } from 'vue-i18n';
 import enUS from './lang/en-US.json';
 // @ts-ignore
 import zhCN from './lang/zh-Hans.json';
+import { useLocale } from '@/locale/utils';
 
 const messages = {
   'zh-Hans': zhCN,
@@ -43,5 +44,14 @@ export const translate = (localeKey: string) => {
 
 // 挂载到 uni 上
 uni.$t = i18n.global.t;
+
+export function stepUpI18n(app: any) {
+  app.use(i18n);
+  app.config.globalProperties.$t = uni.$t;
+  // #ifdef H5
+  window.$t = uni.$t;
+  // #endif
+  useLocale().initLocale();
+}
 
 export default i18n;

@@ -1,9 +1,6 @@
 {
   "globalStyle": {
     "navigationStyle": "custom",
-    "navigationBarTitleText": "uni_app_template",
-    "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTextStyle": "black",
     "backgroundColor": "#FFFFFF"
   },
   "easycom": {

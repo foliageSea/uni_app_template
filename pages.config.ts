@@ -7,9 +7,6 @@ import { name } from './package.json';
 export default defineUniPages({
   globalStyle: {
     navigationStyle: 'custom',
-    navigationBarTitleText: name,
-    navigationBarBackgroundColor: '#ffffff',
-    navigationBarTextStyle: 'black',
     backgroundColor: '#FFFFFF',
   },
   easycom: {
