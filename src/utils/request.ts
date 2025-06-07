@@ -1,4 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosInstance,
+  AxiosError,
+} from 'axios';
 import { createUniAppAxiosAdapter } from '@uni-helper/axios-adapter';
 import { useUserStore } from '@/store';
 import { IBaseResponse } from '@/types/typings';
@@ -8,23 +13,15 @@ const {
   VITE_REQUEST_TIMEOUT,
   VITE_CONTENT_TYPE,
   VITE_SHOW_LOADING,
-  VITE_SHOW_ERROR,
 } = import.meta.env;
 
 const timeout = JSON.parse(VITE_REQUEST_TIMEOUT);
-const showErr = JSON.parse(VITE_SHOW_ERROR);
 const showLoading = JSON.parse(VITE_SHOW_LOADING);
-export interface ResponseType<T = any> {
-  code: number;
-  message: string;
-  data: T;
-}
 
 let requestNum = 0;
 
 interface IRequestConfig extends AxiosRequestConfig {
   loading?: boolean;
-  showError?: boolean;
 }
 
 const addLoading = () => {
@@ -90,8 +87,7 @@ instance.interceptors.response.use(
    */
   (response: AxiosResponse) => {
     const data = response.data;
-    const { loading = showLoading, showError = showErr } =
-      response.config as IRequestConfig;
+    const { loading = showLoading } = response.config as IRequestConfig;
     if (loading) {
       removeLoading();
     }
@@ -99,13 +95,42 @@ instance.interceptors.response.use(
     handleServiceError(response);
     return data;
   },
-  (error) => {
+  (error: AxiosError) => {
     removeLoading();
+    handleError(error);
     return Promise.reject(error);
   },
 );
 
-function _handleToken(token: string | null) {
+const ERR_CUSTOM = 'ERR_CUSTOM';
+
+const errorMap = new Map([
+  ['ECONNABORTED', '请求超时，请检查网络连接'],
+  ['ETIMEDOUT', '连接超时，请稍后重试'],
+  ['ERR_NETWORK', '网络错误，请检查网络连接'],
+  ['ERR_BAD_REQUEST', '请求错误'],
+  ['ERR_BAD_RESPONSE', '服务器响应异常'],
+  ['ERR_FR_TOO_MANY_REDIRECTS', '重定向次数过多'],
+  ['ERR_BAD_OPTION_VALUE', '无效的配置值'],
+  ['ERR_BAD_OPTION', '无效的配置选项'],
+  ['ERR_DEPRECATED', '使用了已废弃的API'],
+  ['ERR_NOT_SUPPORT', '不支持的操作'],
+  ['ERR_INVALID_URL', '无效的URL地址'],
+  ['ERR_CANCELED', '请求已被取消'],
+  [ERR_CUSTOM, null],
+]);
+
+function handleError(error: AxiosError) {
+  const code = error.code;
+  const message = errorMap.get(code) || error.message || '未知错误';
+  uni.showToast({
+    title: message,
+    icon: 'none',
+    duration: 2000,
+  });
+}
+
+function handleToken(token: string | null) {
   if (token === null || token === '') {
     return null;
   }
@@ -115,8 +140,8 @@ function _handleToken(token: string | null) {
 function addAuthHeader(config: IRequestConfig) {
   const token = useUserStore().token;
   const refreshToken = useUserStore().refreshToken;
-  config.headers['Authorization'] = _handleToken(token);
-  config.headers['x-access-token'] = _handleToken(refreshToken);
+  config.headers['Authorization'] = handleToken(token);
+  config.headers['x-access-token'] = handleToken(refreshToken);
 }
 
 function cacheAuthToken(response: AxiosResponse) {
@@ -128,15 +153,15 @@ function cacheAuthToken(response: AxiosResponse) {
   if (validateToken(refreshToken)) {
     useUserStore().setRefreshToken(refreshToken);
   }
+  handle404(response);
+}
+
+function handle404(response: AxiosResponse) {
   let data = response.data;
   let code = data['code'];
   if (code === 401) {
     useUserStore().logout();
-    uni.showToast({
-      title: '登录过期',
-      duration: 2000,
-    });
-    throw new Error('登录过期');
+    throw new AxiosError('登录过期', ERR_CUSTOM);
   }
 }
 
@@ -149,23 +174,11 @@ function handleServiceError(response: AxiosResponse) {
     return;
   }
   if (code === 500) {
-    uni.showToast({
-      title: '服务器内部发生错误',
-      duration: 2000,
-    });
-    throw new Error(message);
+    throw new AxiosError(message, ERR_CUSTOM);
   } else if (code === 400 || code === 1001) {
-    uni.showToast({
-      title: message,
-      duration: 2000,
-    });
-    throw new Error(message);
+    throw new AxiosError(message, ERR_CUSTOM);
   } else {
-    uni.showToast({
-      title: message,
-      duration: 2000,
-    });
-    throw new Error(message);
+    throw new AxiosError(message, ERR_CUSTOM);
   }
 }
 

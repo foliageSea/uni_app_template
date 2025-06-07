@@ -19,6 +19,14 @@
 <script lang="ts" setup>
 import TestLang from './components/TestLang.vue';
 import TestIcon from './components/TestIcon.vue';
+import { useUserService } from '@/apis';
+const userService = useUserService();
+onLoad(async () => {
+  const resp = await userService.login({});
+
+  console.log('登录成功');
+  let data = resp.data;
+});
 </script>
 
 <style lang="scss" scoped>
