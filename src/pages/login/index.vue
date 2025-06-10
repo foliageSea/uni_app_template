@@ -30,20 +30,20 @@
         password
       />
       <button
-        class="w-full h-12 rounded-xl bg-[#8c8cb8] text-white text-base font-bold flex items-center justify-center mb-2"
+        class="w-full h-12 rounded-xl bg-[#5a5f97] text-white text-base font-bold flex items-center justify-center mb-2"
       >
         登录
       </button>
       <view class="w-full text-right text-[#bcbcd8] text-sm mb-8">
         忘记密码？
       </view>
-      <view class="flex items-center my-4">
-        <view class="flex-1 h-2 bg-[#8c8cb8]"></view>
+      <view class="flex items-center my-4 w-full">
+        <view class="flex-1 h-1 border-1px-shadow"></view>
         <view class="mx-4 text-[#bcbcd8] text-sm">或</view>
-        <view class="flex-1 h-2 bg-[#8c8cb8]"></view>
+        <view class="flex-1 h-1 border-1px-shadow"></view>
       </view>
       <button
-        class="relative w-full h-12 rounded-xl bg-[#e3e3f7] text-[#59597c] text-base font-medium mt-4 pl-6 flex items-center justify-start"
+        class="relative w-full h-12 rounded-xl border-0 bg-[#b8b8d2] text-[#59597c] text-base font-medium mt-4 pl-6 flex items-center justify-start"
       >
         <img
           src="https://www.svgrepo.com/show/303187/wechat-logo.svg"
@@ -53,7 +53,7 @@
         <span class="pl-22">使用微信登录</span>
       </button>
       <button
-        class="relative w-full h-12 rounded-xl bg-[#e3e3f7] text-[#59597c] text-base font-medium mt-3 pl-6 flex items-center justify-start"
+        class="relative w-full h-12 rounded-xl bg-[#b8b8d2] text-[#59597c] text-base font-medium mt-3 pl-6 flex items-center justify-start"
       >
         <img
           src="https://api.iconify.design/logos/apple.svg"
@@ -69,27 +69,7 @@
   </view>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-const email = ref('');
-const password = ref('');
-// 由于用户要求不实现业务逻辑，以下代码注释掉
-// import { useUserStore } from '@/store';
-// const router = useRouter();
-// const userStore = useUserStore();
-// function toHome() {
-//   router.replaceAll({ path: '/pages/home/index' });
-// }
-// function handleLogin() {
-//   userStore.setToken('Test');
-//   toHome();
-// }
-// onShow(() => {
-//   if (useUserStore().token) {
-//     toHome();
-//   }
-// });
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .login-bg {
@@ -101,5 +81,8 @@ input::-webkit-input-placeholder {
 }
 input::placeholder {
   color: #b8b8d2;
+}
+.border-1px-shadow {
+  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.2);
 }
 </style>
